@@ -3,6 +3,7 @@ package com.kamran.springbootweb.springbootweb.controllers;
 import com.kamran.springbootweb.springbootweb.dto.EmployeeDTO;
 import com.kamran.springbootweb.springbootweb.entities.EmployeeEntity;
 import com.kamran.springbootweb.springbootweb.repositories.EmployeeRepository;
+import com.kamran.springbootweb.springbootweb.services.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -12,10 +13,10 @@ import java.util.List;
 //@RequestMapping(path = "/api") // Parent Path
 public class EmployeeController {
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping(path = "/")
@@ -34,9 +35,8 @@ public class EmployeeController {
 
     // PART 2 : GET EMPLOYEE BY ID - SINGLE DATA
     @GetMapping(path = "/employees/{id}")
-//    public String getEmployeeById(@PathVariable(name = "employeeId") Long id) {
     public EmployeeEntity getEmployeeById(@PathVariable Long id) {
-        return employeeRepository.findById(id).orElse(null);
+        return employeeService.getEmployeeById(id);
     }
 
     // PART 1
@@ -50,7 +50,7 @@ public class EmployeeController {
     @GetMapping(path = "/employees")
     public List<EmployeeEntity> getAllEmployees(@RequestParam(required = false) Integer age,
                                 @RequestParam(required = false) String sortBy) {
-        return employeeRepository.findAll();
+        return employeeService.getAllEmployees();
     }
 
 //    @PostMapping(path = "/employees")
@@ -69,7 +69,7 @@ public class EmployeeController {
     // PART 2 : CREATE THE DATA
     @PostMapping(path = "/employees")
     public EmployeeEntity createNewEmployee(@RequestBody EmployeeEntity inputEmployees) {
-        return employeeRepository.save(inputEmployees);
+        return employeeService.createNewEmployee(inputEmployees);
     }
 }
 
