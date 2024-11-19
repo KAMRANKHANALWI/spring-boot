@@ -35,7 +35,7 @@ public class EmployeeController {
 
     // PART 2 : GET EMPLOYEE BY ID - SINGLE DATA
     @GetMapping(path = "/employees/{id}")
-    public EmployeeEntity getEmployeeById(@PathVariable Long id) {
+    public EmployeeDTO getEmployeeById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 
@@ -48,15 +48,10 @@ public class EmployeeController {
 
     // PART 2 : GET THE DATA
     @GetMapping(path = "/employees")
-    public List<EmployeeEntity> getAllEmployees(@RequestParam(required = false) Integer age,
+    public List<EmployeeDTO> getAllEmployees(@RequestParam(required = false) Integer age,
                                 @RequestParam(required = false) String sortBy) {
         return employeeService.getAllEmployees();
     }
-
-//    @PostMapping(path = "/employees")
-//    public String createNewEmployee() {
-//        return "Hello from POST";
-//    }
 
     // PART 1
 //    @PostMapping(path = "/employees")
@@ -68,7 +63,7 @@ public class EmployeeController {
 
     // PART 2 : CREATE THE DATA
     @PostMapping(path = "/employees")
-    public EmployeeEntity createNewEmployee(@RequestBody EmployeeEntity inputEmployees) {
+    public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO inputEmployees) {
         return employeeService.createNewEmployee(inputEmployees);
     }
 }
