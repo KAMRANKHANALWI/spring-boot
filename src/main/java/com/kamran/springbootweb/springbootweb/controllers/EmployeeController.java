@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
-//@RequestMapping(path = "/api") // Parent Path
+@RequestMapping(path = "/employees")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -24,47 +26,41 @@ public class EmployeeController {
         return "Hello Buddy";
     }
 
-    // 1. PATH VARIABLE, 2. REQUEST PARAM
-
-    // PART 1
-//    @GetMapping(path = "/employees/{id}")
-////    public String getEmployeeById(@PathVariable(name = "employeeId") Long id) {
-//    public String getEmployeeById(@PathVariable Long id) {
-//        return new EmployeeDTO(id, "Kamran", "kamran@gmail.com", "21", LocalDate.of(2024, 11, 19), true);
-//    }
-
-    // PART 2 : GET EMPLOYEE BY ID - SINGLE DATA
-    @GetMapping(path = "/employees/{id}")
+    // GET MAPPING : GET A EMPLOYEE BY ID
+    @GetMapping(path = "/{id}")
     public EmployeeDTO getEmployeeById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 
-    // PART 1
-//    @GetMapping(path = "/employees")
-//    public String getAllEmployees(@RequestParam(required = false) Integer age,
-//                                  @RequestParam(required = false) String sortBy) {
-//        return "Hii, I am " + age + " year old " + sortBy;
-//    }
-
-    // PART 2 : GET THE DATA
-    @GetMapping(path = "/employees")
+    // GET MAPPING : GET ALL DATA/EMPLOYEES
+    @GetMapping
     public List<EmployeeDTO> getAllEmployees(@RequestParam(required = false) Integer age,
                                 @RequestParam(required = false) String sortBy) {
         return employeeService.getAllEmployees();
     }
 
-    // PART 1
-//    @PostMapping(path = "/employees")
-//    public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO inputEmployees) {
-//        inputEmployees.setId(100L);
-//        return  inputEmployees;
-//    }
-//}
-
-    // PART 2 : CREATE THE DATA
-    @PostMapping(path = "/employees")
+    // POST MAPPING : CREATE THE DATA
+    @PostMapping
     public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO inputEmployees) {
         return employeeService.createNewEmployee(inputEmployees);
+    }
+
+    // PUT : CHANGE OR EDIT THE DATA
+    @PutMapping(path = "/{id}")
+    public EmployeeDTO updateEmployeeById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long id) {
+        return employeeService.updateEmployeeById(employeeDTO, id);
+    }
+
+    // DELETE : DELETE THE DATA
+    @DeleteMapping(path = "/{id}")
+    public boolean deleteEmployeeById(@PathVariable Long id) {
+        return employeeService.deleteEmployeeById(id);
+    }
+
+    // PATCH : PARTIALLY CHANGE THE DATA
+    @PatchMapping(path = "/{id}")
+    public EmployeeDTO updatePartialEmployeeById(@RequestBody Map<String, Object> updates, @PathVariable Long id) {
+        return employeeService.updatePartialEmployeeById(id, updates);
     }
 }
 
