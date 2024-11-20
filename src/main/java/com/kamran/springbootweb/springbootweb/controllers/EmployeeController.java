@@ -2,17 +2,16 @@ package com.kamran.springbootweb.springbootweb.controllers;
 
 import com.kamran.springbootweb.springbootweb.dto.EmployeeDTO;
 import com.kamran.springbootweb.springbootweb.entities.EmployeeEntity;
+import com.kamran.springbootweb.springbootweb.exceptions.ResourceNotFoundException;
 import com.kamran.springbootweb.springbootweb.repositories.EmployeeRepository;
 import com.kamran.springbootweb.springbootweb.services.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/employees")
@@ -30,8 +29,14 @@ public class EmployeeController {
         Optional<EmployeeDTO> employeeDTO = employeeService.getEmployeeById(id);
         return employeeDTO
                 .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
     }
+
+    // REPLACED IT WITH GLOBAL EXCEPTION HANDLER
+//    @ExceptionHandler(NoSuchElementException.class)
+//    public ResponseEntity<String> handleEmployeeNotFound(NoSuchElementException exception) {
+//        return new ResponseEntity<>("Employee was not found", HttpStatus.NOT_FOUND);
+//    }
 
     // GET MAPPING : GET ALL DATA/EMPLOYEES
     @GetMapping
@@ -42,14 +47,14 @@ public class EmployeeController {
 
     // POST MAPPING : CREATE THE DATA
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody EmployeeDTO inputEmployees) {
+    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody @Valid EmployeeDTO inputEmployees) {
         EmployeeDTO savedEmployee = employeeService.createNewEmployee(inputEmployees);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
 
     // PUT : CHANGE OR EDIT THE DATA
     @PutMapping(path = "/{id}")
-    public ResponseEntity<EmployeeDTO> updateEmployeeById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long id) {
+    public ResponseEntity<EmployeeDTO> updateEmployeeById(@RequestBody @Valid EmployeeDTO employeeDTO, @PathVariable Long id) {
         return ResponseEntity.ok(employeeService.updateEmployeeById(employeeDTO, id));
     }
 
