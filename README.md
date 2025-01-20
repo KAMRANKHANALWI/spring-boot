@@ -24,7 +24,7 @@ This repository contains various **Spring Boot concepts** that cover essential f
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/spring-boot-concepts.git
+   git clone https://github.com/KAMRANKHANALWI/spring-boot.git
    ```
    
 
